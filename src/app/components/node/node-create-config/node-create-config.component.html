@@ -4,140 +4,8 @@
     Create a node configuration file for {{server_url}}:{{server_port}}{{api_path}}
     by filling out the form below.
   </i></p>
-  <!-- <form (ngSubmit)="download()" #nodeForm="ngForm">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input type="text" class="form-control" id="name"
-             required [(ngModel)]="config.name" name="name"
-             #name="ngModel"/>
-    </div>
 
-    <div class="form-group">
-      <label for="environment">Environment</label>
-      <select class="form-control" id="environment"
-              required
-              [(ngModel)]="config.environment" name="environment"
-              #environment="ngModel">
-        <option *ngFor="let env of ENVS" [value]="env">{{env}}</option>
-      </select>
-    </div>
-
-    <h5>API key</h5>
-    <div class="form-group">
-      <input #create_api_key type="checkbox" name="create_api_key"
-        [(ngModel)]="config.is_create_api_key"/>
-      <label for="create_api_key">Generate a new API key</label>
-      <br/>
-      <label for="api_key">API key</label>
-      <input type="text" class="form-control" id="api_key"
-            required [(ngModel)]="config.api_key" name="api_key"
-            [disabled]="config.is_create_api_key"
-            #api_key="ngModel"/>
-    </div>
-
-    <p><b>TODO add task directory</b></p>
-
-    <h5>Database</h5>
-    <p><i>Define your databases</i></p>
-
-
-    <button type="submit" class="btn btn-save" (click)="download()">
-      Download config file
-    </button>
-    <button mat-button class="btn btn-dflt" (click)="cancel()">
-      Cancel
-    </button>
-  </form> -->
-
-  <form [formGroup]="formGroup" (ngSubmit)="download()" class="form">
-
-    <!-- <mat-form-field class="form-element">
-      <input matInput placeholder="Emailaddress" formControlName="email">
-      <mat-error *ngIf="!formGroup.controls['email'].valid && formGroup.controls['email'].touched">
-        {{ getErrorEmail() }}
-      </mat-error>
-    </mat-form-field> -->
-
-    <mat-form-field class="form-element">
-      <input matInput placeholder="Name" formControlName="name"/>
-      <mat-error *ngIf="!name.valid && name.touched">
-        {{ REQUIRED_ALERT }}
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field class="form-element">
-      <mat-label>Environment</mat-label>
-      <mat-select formControlName="environment">
-        <div >
-          <mat-option *ngFor="let env of ENVS" [value]="env">
-            {{env}}
-          </mat-option>
-        </div>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- <mat-label>Environment</mat-label> -->
-    <h5>API key</h5>
-    <mat-checkbox formControlName="is_generate_api_key">
-      Generate a new API key
-    </mat-checkbox>
-    <mat-form-field *ngIf="!formGroup.value.is_generate_api_key" class="form-element">
-      <input matInput placeholder="Insert your current API key" formControlName="api_key"/>
-      <!-- <mat-error>
-        You should specify your current API key if you don't intend to generate
-        a new API key!
-      </mat-error> -->
-    </mat-form-field>
-
-    <p><b>TODO add task directory</b></p>
-
-    <h5>Database</h5>
-    <p><i>Define your databases</i></p>
-
-    <mat-table [dataSource]="dataSource">
-      <ng-container matColumnDef="labels">
-        <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
-        <mat-cell *matCellDef="let element;" [formGroup]="element">
-          <mat-form-field floatLabel="never">
-            <input matInput placeholder="Label" formControlName="label" required/>
-          </mat-form-field>
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="paths">
-        <mat-header-cell *matHeaderCellDef>Path</mat-header-cell>
-        <mat-cell *matCellDef="let element;" [formGroup]="element">
-          <mat-form-field floatLabel="never">
-            <input matInput placeholder="Path" formControlName="path" required/>
-          </mat-form-field>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-    <!-- <div formArrayName="databases"
-        *ngFor="let db of databases.controls; let i = index">
-      <div [formGroupName]="i">
-        <input type="text" formControlName="label" placeholder="Database label" />
-        <input type="text" formControlName="path" placeholder="Database path" />
-      </div>
-    </div> -->
-
-    <div class="form-element">
-      <button mat-button class="btn btn-save" (click)="download()"
-          [disabled]="!formGroup.valid" type="submit">
-        Download configuration file
-      </button>
-      <button mat-button class="btn btn-dflt" (click)="cancel()">
-        Cancel
-      </button>
-    </div>
-  </form>
-
-
-
-  <div style="margin-top: 300px;"></div>
+  <h5>General settings</h5>
   <table style="width: 100%">
     <colgroup>
       <col span="1" style="width: 20%;"/>
@@ -170,76 +38,138 @@
       </td>
     </tr>
     <tr>
-      <td>API key:</td>
+      <td>Log level:</td>
       <td>
-        <mat-checkbox [(ngModel)]="config.is_create_api_key">
-          Generate a new API key
-        </mat-checkbox>
-        <div *ngIf="!config.is_create_api_key">
-          <mat-form-field style="width: 400px">
-            <mat-label>API key</mat-label>
-            <input matInput [(ngModel)]="config.api_key" placeholder="Enter your API key"/>
-          </mat-form-field>
+        <div ngbDropdown class="d-inline-block">
+          <button class="btn btn-dropdown" id="dropdownLogLvls" ngbDropdownToggle>
+            <span class="align-top">{{config.log_level}}</span>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownLogLvls">
+            <div *ngFor="let lvl of LOG_LEVELS">
+              <button ngbDropdownItem (click)="selectLogLvl(lvl)">
+                {{lvl}}
+              </button>
+            </div>
+          </div>
         </div>
       </td>
     </tr>
-    <tr>
-      <td>Server address:</td>
-      <td>{{server_url}}:{{server_port}}{{api_path}}</td>
-    </tr>
-    <tr>
-      <td>Task directory:</td>
+  </table>
+  <p><b>TODO Implement setting task directory</b></p>
+
+  <h5>API key</h5>
+  <mat-checkbox [(ngModel)]="config.is_create_api_key">
+    Generate a new API key
+  </mat-checkbox>
+  <div *ngIf="!config.is_create_api_key">
+    <p>If you don't generate a new API key, you have to provide your current key</p>
+    <mat-form-field style="width: 400px">
+      <mat-label>API key</mat-label>
+      <input matInput [(ngModel)]="config.api_key" placeholder="Enter your API key"/>
+    </mat-form-field>
+  </div>
+
+  <h5>Databases</h5>
+  <table style="width: 100%">
+    <colgroup>
+      <col span="1" style="width: 20%;"/>
+      <col span="1" style="width: 80%;"/>
+    </colgroup>
+    <tr *ngFor="let db of config.databases">
       <td>
-        <b>To be implemented</b>
+        <mat-form-field>
+          <mat-label>Label</mat-label>
+          <input matInput [(ngModel)]="db.label" placeholder="Label"/>
+        </mat-form-field>
       </td>
-    </tr>
-    <tr>
-      <td>Database(s):</td>
-      <td>
-      </td>
-    </tr>
-    <tr>
-      <td>Log level:</td>
-      <td>
-      </td>
-    </tr>
-    <tr>
-      <td>Do you want to connect to a VPN server?</td>
-      <td>
-      </td>
-    </tr>
-    <tr>
-      <td>VPN subnet:</td>
-      <td>
-        <!-- default 10.76.0.0/16 -->
-      </td>
-    </tr>
-    <tr>
-      <td>Enable encryption:</td>
-      <td>
-        <!-- Yes or no -->
-      </td>
-    </tr>
-    <tr>
-      <td>Path to private key file:</td>
-      <td>
-        <!-- Yes or no -->
-      </td>
-    </tr>
-    <tr>
-      <td>Do you want to set limitations on the algorithms that can be executed?</td>
-      <td>
-        <!-- Default all, other  -->
-      </td>
-    </tr>
-    <tr>
-      <td>Do you want to link any Docker containers to your algorithms?</td>
-      <td>
-        <!-- Yes or no, then fields with labels and docker names -->
-      </td>
+      <mat-form-field style="width: 400px">
+        <mat-label>Path</mat-label>
+        <input matInput [(ngModel)]="db.path" placeholder="Database path"/>
+      </mat-form-field>
     </tr>
   </table>
-  <button mat-button class="btn btn-save" (click)="download()">
+  <button mat-button class="btn btn-dflt" (click)="addDatabase()">
+    Add another database
+  </button>
+
+  <h5>VPN connection</h5>
+  <p><i>
+    A VPN connection is required if algorithms at different sites need to
+    communicate with each other.
+  </i></p>
+  <mat-checkbox [(ngModel)]="config.is_configure_vpn">
+    Configure VPN
+  </mat-checkbox>
+  <div *ngIf="config.is_configure_vpn">
+    <p>Please provide the subnet for your VPN server</p>
+    <mat-form-field>
+      <mat-label>VPN subnet</mat-label>
+      <input matInput [(ngModel)]="config.vpn_subnet" placeholder="VPN subnet"/>
+    </mat-form-field>
+  </div>
+
+  <!-- TODO use node properties -->
+  <h5>Encryption</h5>
+  <div *ngIf="node.collaboration; else setEncryptionBlock">
+    <div *ngIf="node.collaboration.encrypted; else notEncryptedBlock">
+      <p>
+        Your node is in an encrypted collaboration. Please provide the path
+        to your private key file.
+      </p>
+      <mat-form-field>
+        <mat-label>Private key file path</mat-label>
+        <input matInput [(ngModel)]="config.private_key_path" placeholder="Private key file path"/>
+      </mat-form-field>
+    </div>
+    <ng-template #notEncryptedBlock>
+      <p>
+        Your node is in a non-encrypted collaboration, so no encryption setup
+        is necessary.
+      </p>
+    </ng-template>
+  </div>
+  <ng-template #setEncryptionBlock>
+    <mat-checkbox [(ngModel)]="config.is_encrypted">
+      Set up encryption
+    </mat-checkbox>
+    <div *ngIf="config.is_encrypted">
+      <p>Please provide the path to your private key file</p>
+      <mat-form-field>
+        <mat-label>Private key file path</mat-label>
+        <input matInput [(ngModel)]="config.private_key_path" placeholder="Private key file path"/>
+      </mat-form-field>
+    </div>
+  </ng-template>
+
+  <h5>Limit algorithm access</h5>
+  <p><i>
+    Set up limitations for which algorithms are allowed to be executed on your node.
+  </i></p>
+  <mat-checkbox [(ngModel)]="config.allow_all_algorithms" style="display: block;">
+    Allow all
+  </mat-checkbox>
+  <div *ngIf="!config.allow_all_algorithms">
+    <p>Please provide which algorithms you want to allow</p>
+    <p>For example, add <code>harbor2.vantage6.ai/algorithms/summary</code>
+       if you want to allow access for that docker image
+    </p>
+    <p>You can also specify a pattern such as <code>^harbor2.vantage6.ai/*</code> to allow
+       all algorithms hosted on harbor2.vantage6.ai.
+    </p>
+    <div *ngFor="let algo of config.allowed_algorithms">
+      <!-- <button>{{algo}}</button> -->
+      <mat-form-field>
+        <mat-label>Algorithm / algorithm set</mat-label>
+        <input matInput [(ngModel)]="algo.algo_exp" placeholder="Algorithm"/>
+      </mat-form-field>
+    </div>
+    <button mat-button class="btn btn-dflt" (click)="addAlgorithm()">
+      Add another allowed algorithm
+    </button>
+  </div>
+
+  <!-- TODO add option to add docker services? -->
+  <button mat-button class="btn btn-save" (click)="download()" style="margin-top: 20px">
     Download configuration file
   </button>
   <button mat-button class="btn btn-dflt" (click)="cancel()">

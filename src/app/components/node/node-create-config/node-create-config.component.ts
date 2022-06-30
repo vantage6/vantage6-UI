@@ -1,18 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY_NODE, NodeWithOrg } from 'src/app/interfaces/node';
 import { UtilsService } from 'src/app/services/common/utils.service';
+import { CollabDataService } from 'src/app/services/data/collab-data.service';
 import { NodeDataService } from 'src/app/services/data/node-data.service';
+import { OrgDataService } from 'src/app/services/data/org-data.service';
 import { ResType } from 'src/app/shared/enum';
 import { environment } from 'src/environments/environment';
 import { NodeConfig } from './node-config';
@@ -27,15 +19,30 @@ import { NodeConfig } from './node-config';
 })
 export class NodeCreateConfigComponent implements OnInit {
   ENVS: string[] = ['application', 'prod', 'acc', 'test', 'dev'];
-  REQUIRED_ALERT: string = 'This field is required';
+  LOG_LEVELS: string[] = [
+    'debug',
+    'info',
+    'warning',
+    'error',
+    'critical',
+    'notset',
+  ];
 
   route_id: number | null = null;
   node: NodeWithOrg = EMPTY_NODE;
-  formGroup: FormGroup;
-  dataSource: MatTableDataSource<any>;
-  displayedColumns = ['labels', 'paths'];
 
-  config = new NodeConfig('', this.ENVS[0], true, []);
+  config = new NodeConfig(
+    '',
+    this.ENVS[0],
+    true,
+    [{ label: 'default', path: '' }],
+    this.LOG_LEVELS[0],
+    false,
+    '10.76.0.0/16',
+    false,
+    true,
+    [{ algo_exp: '' }]
+  );
   submitted = false;
 
   server_url = environment.server_url;
@@ -44,62 +51,15 @@ export class NodeCreateConfigComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder,
     private nodeDataService: NodeDataService,
+    private collabDataService: CollabDataService,
+    private orgDataService: OrgDataService,
     private utilsService: UtilsService
   ) {}
 
   ngOnInit(): void {
     this.readRoute();
-    this.createForm();
   }
-
-  createForm(): void {
-    this.formGroup = this.formBuilder.group(
-      {
-        name: [null, [Validators.required]],
-        environment: [this.ENVS[0], [Validators.required]],
-        is_generate_api_key: [true, []],
-        api_key: [null, []],
-        databases: [this.formBuilder.array([]), []],
-      },
-      {
-        // validator: this.hasApiKeyOrGeneratingOne,
-      }
-    );
-    // initialize databases
-    const row = new FormGroup({
-      label: new FormControl('default', Validators.required),
-      path: new FormControl('', Validators.required),
-    });
-    const formArray = new FormArray([row]);
-    this.dataSource = new MatTableDataSource(formArray.controls);
-    // this.formGroup.setControl('databases', )
-    // this.databases.push(row);
-  }
-
-  get name() {
-    return this.formGroup.get('name') as FormControl;
-  }
-
-  get api_key() {
-    return this.formGroup.get('api_key') as FormControl;
-  }
-
-  get databases(): FormArray {
-    return this.formGroup.get('databases') as FormArray;
-  }
-
-  // hasApiKeyOrGeneratingOne(formGroup: FormGroup) {
-  //   let is_generating = formGroup.controls['is_generate_api_key'].value;
-  //   let api_key = formGroup.controls['api_key'].value;
-  //   console.log(is_generating);
-  //   console.log(api_key);
-  //   console.log(is_generating || api_key);
-  //   // if (! )
-  //   console.log(is_generating || api_key ? { requirements: true } : null);
-  //   return is_generating || api_key ? null : { noApiKey: true };
-  // }
 
   // TODO this code is very similar to that used in other places...
   readRoute(): void {
@@ -113,21 +73,54 @@ export class NodeCreateConfigComponent implements OnInit {
   }
 
   async setup() {
-    this.setNode();
+    await this.setNode();
+    await this.addCollabToNode();
+    await this.addOrgToNode();
+    if (this.node.collaboration && this.node.organization) {
+      this.config.name =
+        `${this.node.collaboration.name}_${this.node.organization.name}` +
+        `_node_config`;
+    }
+    if (this.node.collaboration) {
+      this.config.is_encrypted = this.node.collaboration.encrypted;
+    }
   }
 
   async setNode(): Promise<void> {
     this.node = await this.nodeDataService.get(this.route_id as number);
   }
 
+  async addCollabToNode() {
+    this.node.collaboration = await this.collabDataService.get(
+      this.node.collaboration_id
+    );
+  }
+
+  async addOrgToNode() {
+    this.node.organization = await this.orgDataService.get(
+      this.node.organization_id
+    );
+  }
+
   selectEnv(env: string): void {
     this.config.environment = env;
+  }
+
+  selectLogLvl(lvl: string): void {
+    this.config.log_level = lvl;
+  }
+
+  addDatabase(): void {
+    this.config.databases.push({ label: '', path: '' });
+  }
+
+  addAlgorithm(): void {
+    this.config.allowed_algorithms.push({ algo_exp: '' });
   }
 
   download() {
     this.submitted = true;
     console.log(this.config);
-    console.log(this.formGroup.value);
   }
   cancel() {}
 }
