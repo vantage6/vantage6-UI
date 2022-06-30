@@ -26,6 +26,7 @@ import { CollaborationTableComponent } from './components/collaboration/collabor
 import { RoleViewSingleComponent } from './components/role/role-view-single/role-view-single.component';
 import { UserViewSingleComponent } from './components/user/user-view-single/user-view-single.component';
 import { NodeSingleViewComponent } from './components/node/node-single-view/node-single-view.component';
+import { NodeCreateConfigComponent } from './components/node/node-create-config/node-create-config.component';
 
 const routes: Routes = [
   {
@@ -269,6 +270,16 @@ const routes: Routes = [
       permissionScope: ScopeType.GLOBAL,
     },
     canActivate: [AccessGuard],
+  },
+  {
+    path: 'node/config/:id/:org_id',
+    component: NodeCreateConfigComponent,
+    data: {
+      requiresLogin: true,
+      permissionType: OpsType.EDIT,
+      permissionResource: ResType.NODE,
+    },
+    canActivate: [AccessGuardByOrgId],
   },
   {
     path: 'tasks',

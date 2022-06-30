@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -59,6 +59,8 @@ import { CollaborationTableComponent } from './components/collaboration/collabor
 import { RoleViewSingleComponent } from './components/role/role-view-single/role-view-single.component';
 import { UserViewSingleComponent } from './components/user/user-view-single/user-view-single.component';
 import { NodeSingleViewComponent } from './components/node/node-single-view/node-single-view.component';
+import { NodeCreateConfigComponent } from './components/node/node-create-config/node-create-config.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -93,11 +95,13 @@ import { NodeSingleViewComponent } from './components/node/node-single-view/node
     RoleViewSingleComponent,
     UserViewSingleComponent,
     NodeSingleViewComponent,
+    NodeCreateConfigComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     NoopAnimationsModule,
     BrowserAnimationsModule,
@@ -113,6 +117,9 @@ import { NodeSingleViewComponent } from './components/node/node-single-view/node
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
     CommonModule,

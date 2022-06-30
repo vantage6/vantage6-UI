@@ -51,9 +51,16 @@
   Delete node
 </button>
 <br/>
-<div *ngIf="userPermission.can('edit', 'node', node.organization_id)"
-      style="margin-top: 15px;">
-  <h4>API key</h4>
+<div *ngIf="userPermission.can('edit', 'node', node.organization_id)">
+  <!-- TODO when to allow user to create node config file? Now requiring edit
+       node permission because that is necessary to generate new API key if
+       it is not known
+   -->
+  <h4 style="margin-top: 15px;">Create node configuration file</h4>
+  <button mat-button class="btn btn-save" [routerLink]="['/node/config', node.id, node.organization_id]">
+    Generate node configuration file
+  </button>
+  <h4 style="margin-top: 15px;">API key</h4>
   <p>
     Have you lost your API key? Please generate a new API key and paste it into
     your node configuration file.

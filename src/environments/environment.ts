@@ -5,6 +5,10 @@
 export const environment = {
   production: false,
   server_name: 'local test server',
+  server_url: 'http://localhost',
+  server_port: 5000,
+  api_path: '/api',
+  // TODO delete api_url but generate it where necessary from data above
   api_url: 'http://localhost:5000/api',
 };
 
