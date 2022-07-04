@@ -43,7 +43,6 @@ export class NodeCreateConfigComponent implements OnInit {
     true,
     [{ algo_exp: '' }]
   );
-  submitted = false;
 
   server_url = environment.server_url;
   server_port = environment.server_port;
@@ -119,8 +118,10 @@ export class NodeCreateConfigComponent implements OnInit {
   }
 
   download() {
-    this.submitted = true;
     console.log(this.config);
   }
-  cancel() {}
+
+  cancel() {
+    this.utilsService.goToPreviousPage();
+  }
 }
