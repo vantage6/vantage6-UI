@@ -3,7 +3,7 @@ import { merge, of } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 
 import { SocketioMessageService } from 'src/app/services/common/socketio-message.service';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 
 @Component({
   selector: 'app-socket-messages',
