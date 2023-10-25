@@ -14,6 +14,7 @@ import { ConfirmDialog } from 'src/app/components/dialogs/confirm/confirm-dialog
 import { FormControl } from '@angular/forms';
 import { ChosenCollaborationService } from 'src/app/services/chosen-collaboration.service';
 import { PermissionService } from 'src/app/services/permission.service';
+import { mockTaskCompleted } from 'src/app/mock-data/task';
 
 @Component({
   selector: 'app-task-read',
@@ -58,7 +59,9 @@ export class TaskReadComponent implements OnInit {
   }
 
   async initData(): Promise<void> {
-    this.task = await this.taskService.getTask(this.id, [TaskLazyProperties.InitOrg, TaskLazyProperties.InitUser]);
+    this.task = mockTaskCompleted;
+    console.log(this.task);
+    //this.task = await this.taskService.getTask(this.id, [TaskLazyProperties.InitOrg, TaskLazyProperties.InitUser]);
     this.algorithm = await this.algorithmService.getAlgorithmByUrl(this.task.image);
     this.function = this.algorithm?.functions.find((_) => _.name === this.task?.input?.method) || null;
     this.selectedOutput = this.function?.output?.[0] || null;

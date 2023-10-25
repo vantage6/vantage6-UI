@@ -33,7 +33,7 @@ export class StartComponent implements OnInit {
 
   private async initData(): Promise<void> {
     const params: GetCollaborationParameters = {
-      sort: CollaborationSortProperties.Name
+      //sort: CollaborationSortProperties.Name
     };
     const activeOrgId = this.permissionService.getActiveOrganizationID();
     if (activeOrgId) {
