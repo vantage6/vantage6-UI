@@ -25,6 +25,7 @@ import { CollaborationEditComponent } from './pages/collaboration/edit/collabora
 import { UserEditComponent } from './pages/user/edit/user-edit.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { chosenCollaborationGuard } from './guards/chosenCollaboration.guard';
+import { OperationType, ResourceType, ScopeType } from './models/api/rule.model';
 
 const routes: Routes = [
   {
@@ -54,7 +55,7 @@ const routes: Routes = [
       {
         path: routerConfig.taskCreate,
         component: TaskCreateComponent,
-        canActivate: [authenticationGuard(), chosenCollaborationGuard()]
+        canActivate: [authenticationGuard(), chosenCollaborationGuard(ResourceType.TASK, OperationType.CREATE)]
       },
       {
         path: routerConfig.task,
