@@ -75,7 +75,7 @@ const result = {
         '3': 19,
         '4': 23,
         '5': 23,
-        _type: 'catagorical'
+        _type: 'categorical'
       },
       b04_sex: {
         '1': 50,
