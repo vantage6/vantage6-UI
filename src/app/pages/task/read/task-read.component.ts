@@ -1,7 +1,7 @@
 import { Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { getChipTypeForStatus, getStatusType, getTaskStatusTranslation } from 'src/app/helpers/task.helper';
-import { Algorithm, AlgorithmFunction, Output } from 'src/app/models/api/algorithm.model';
+import { Algorithm, AlgorithmFunction, Output, OutputType, OutputVisualizeType } from 'src/app/models/api/algorithm.model';
 import { Task, TaskLazyProperties, TaskRun, TaskStatus, TaskResult, BaseTask, TaskStatusGroup } from 'src/app/models/api/task.models';
 import { routePaths } from 'src/app/routes';
 import { AlgorithmService } from 'src/app/services/algorithm.service';
@@ -110,7 +110,17 @@ export class TaskReadComponent implements OnInit, OnDestroy {
     }
     this.algorithm = await this.algorithmService.getAlgorithmByUrl(this.task.image);
     this.function = this.algorithm?.functions.find((_) => _.name === this.task?.input?.method) || null;
-    this.selectedOutput = this.function?.output?.[0] || null;
+    // this.selectedOutput = this.function?.output?.[0] || null;
+    this.selectedOutput = {
+      visualize: OutputVisualizeType.Table,
+      title: 'Table',
+      type: OutputType.Int
+    };
+    if (this.task.parent === null) {
+      this.selectedOutput.keys = ['average'];
+    } else {
+      this.selectedOutput.keys = ['sum', 'count'];
+    }
     this.isLoading = false;
   }
 
