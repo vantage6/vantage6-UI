@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AddAlgorithmStore, AlgorithmStore, EditAlgorithmStore } from '../models/api/algorithmStore.model';
-import { ApiService } from './api.service';
+import { ApiService } from './v6server/api.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

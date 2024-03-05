@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SearchRequest } from '../components/table/table.component';
 import { Pagination } from '../models/api/pagination.model';
-import { ApiService } from '../services/api.service';
+import { ApiService } from '../services/v6server/api.service';
 
 export const getLazyProperties = async (result: any, data: any, lazyProperties: string[], apiService: ApiService): Promise<void> => {
   await Promise.all(

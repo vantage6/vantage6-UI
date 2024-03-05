@@ -3,7 +3,7 @@ import { OperationType, ResourceType, Rule, ScopeType } from '../models/api/rule
 import { Pagination } from '../models/api/pagination.model';
 import { Collaboration } from '../models/api/collaboration.model';
 import { BaseUser } from '../models/api/user.model';
-import { ApiService } from './api.service';
+import { ApiService } from './v6server/api.service';
 import { USER_ID } from '../models/constants/sessionStorage';
 import { TokenStorageService } from './token-storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';

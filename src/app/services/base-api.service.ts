@@ -4,14 +4,14 @@ import { Observable, first } from 'rxjs';
 import { ACCESS_TOKEN_KEY } from '../models/constants/sessionStorage';
 import { environment } from 'src/environments/environment';
 import { Pagination } from '../models/api/pagination.model';
-import { SnackbarService } from './snackbar.service';
 import { Router } from '@angular/router';
 import { LoginErrorService } from './login-error.service';
+import {SnackbarService} from "./snackbar.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export abstract class BaseApiService {
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -157,11 +157,5 @@ export class ApiService {
     return errorMsg;
   }
 
-  private getApiPath(path: string): string {
-    //TODO: Lazy loaded calls already include API path
-    if (path.startsWith('/') && path.startsWith(environment.api_path)) {
-      return environment.server_url + path;
-    }
-    return environment.server_url + environment.api_path + path;
-  }
+  protected abstract getApiPath(path: string): string
 }

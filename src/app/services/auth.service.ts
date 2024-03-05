@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LoginForm, LostPasswordForm, MFAResetTokenForm, PasswordResetTokenForm } from '../models/forms/login-form.model';
-import { ApiService } from './api.service';
+import { ApiService } from './v6server/api.service';
 import { AuthResult, ChangePassword, Login, LoginSubmit, LoginRecoverLost, SetupMFA, LoginRecoverSubmit } from '../models/api/auth.model';
 import { PermissionService } from './permission.service';
 import { TokenStorageService } from './token-storage.service';

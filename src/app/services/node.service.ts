@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
+import { ApiService } from './v6server/api.service';
 import { APIKey, BaseNode, GetNodeParameters, Node, NodeCreate, NodeEdit, NodeLazyProperties } from '../models/api/node.model';
 import { BaseCollaboration, Collaboration } from '../models/api/collaboration.model';
 import { OrganizationService } from './organization.service';

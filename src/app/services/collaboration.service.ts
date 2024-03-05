@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
+import { ApiService } from './v6server/api.service';
 import { Pagination } from '../models/api/pagination.model';
 import {
   BaseCollaboration,

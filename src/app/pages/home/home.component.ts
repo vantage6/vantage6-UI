@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ApiService } from '../../services/api.service';
+import { ApiService } from '../../services/v6server/api.service';
 import { Version } from '../../models/api/version.model';
 import packageJson from '../../../../package.json';
 
