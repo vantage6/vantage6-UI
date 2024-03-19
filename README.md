@@ -13,6 +13,10 @@
 
 ---
 
+# This repository has been moved to be a part of the [general vantage6 repository](https://github.com/vantage6/vantage6)
+
+# Please do not use this repository any more - it is no longer maintained
+
 This repository is part of **vantage6**, and contains the code for our User Interface.
 This is a web application that allows you to communicate easily with your **vantage6** server.
 
